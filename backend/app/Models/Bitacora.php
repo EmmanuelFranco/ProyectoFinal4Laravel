@@ -11,9 +11,9 @@ class Bitacora extends Model
     use HasFactory;
     protected $table = 'bitacoras';
     protected $fillable = [
-        'bitacora',        
+        'bitacora',
         'fecha',
-        'hora',       
+        'hora',
         'usuario',
     ];
 
@@ -24,14 +24,14 @@ class Bitacora extends Model
     }
 
     public static function add($bitacora, $usuario)
-    {       
+    {
         $bitacora = Bitacora::create([
-            'bitacora' => $bitacora,            
+            'bitacora' => $bitacora,
             'fecha' => date('Y-m-d'),
-            'hora' => date('H:i:s'),                
+            'hora' => date('H:i:s'),
             'usuario' => $usuario
-                ]);
-    
+        ]);
+
         return $bitacora;
     }
 }

@@ -8,6 +8,7 @@ import UsuariosList from './components/UsuariosList';
 import EditarUsuario from './components/EditarUsuario';
 import RolesView from './components/Roles';
 import Bitacoras from './components/Bitacoras';
+import PaginasList from './components/PaginasLists';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/editar-usuario/:id" element={<EditarUsuario />} />
         <Route path="/roles" element={<RolesView />} />
         <Route path="/bitacoras" element={<Bitacoras />} />
+        <Route path="/paginas" element={<PaginasList />} />
        
       </Routes>
     </Router>

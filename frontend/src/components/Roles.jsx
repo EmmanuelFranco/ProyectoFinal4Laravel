@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 function Roles() {
   const navigate = useNavigate();
   const [roles, setRoles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [newRoleData, setNewRoleData] = useState({
-    id:"",
+    id: "",
     rol: "",
     usuariocreacion: "",
     usuariomodificacion: "",
@@ -20,9 +21,11 @@ function Roles() {
       .get("http://127.0.0.1:8000/api/roles")
       .then((response) => {
         setRoles(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching roles:", error);
+        setLoading(false);
       });
   }, []);
 
@@ -61,7 +64,6 @@ function Roles() {
         setRoles([...roles, response.data]);
         setShowAddForm(false);
         setNewRoleData({
-          
           rol: "",
           fechacreacion: "",
           fechamodificacion: "",
@@ -73,10 +75,12 @@ function Roles() {
         console.error("Error adding role:", error);
       });
   };
+  
+  
 
   const handleDeleteRole = () => {
     axios
-      .delete(`http://127.0.0.1:8000/api/roles/${roleToDelete.id}`)
+      .delete(`http://127.0.0.1:8000/api/roles/${roleToDelete.id}`,)
       .then((response) => {
         setRoles(roles.filter((role) => role.id !== roleToDelete.id));
         setShowDeleteModal(false);
@@ -103,6 +107,7 @@ function Roles() {
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold mb-4">Roles</h1>
+
       <div className="flex justify-between">
         <button
           onClick={() => goToDashboard()}
@@ -151,49 +156,54 @@ function Roles() {
           </button>
         </div>
       )}
-     
-      <table className="mt-4 w-full">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="px-4 py-2">Id</th>
-            <th className="px-4 py-2">Rol</th>
-            <th className="px-4 py-2">Estado</th>
-            <th className="px-4 py-2">Fecha de Creación</th>
-            <th className="px-4 py-2">Fecha de Modificación</th>
-            <th className="px-4 py-2">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {roles.map((role) => (
-            <tr key={role.id} className="border-b">
-              <td className="px-4 py-2 text-center">{role.id}</td>
-              <td className="px-4 py-2 text-center">{role.rol}</td>
-              <td className="px-4 py-2 text-center">
-                {role.estado ? "Activo" : "Inactivo"}
-              </td>
-              <td className="px-4 py-2 text-center">{role.fechacreacion}</td>
-              <td className="px-4 py-2 text-center">
-                {role.fechamodificacion}
-              </td>
-              <td className="px-4 py-2 text-center">
-                <button
-                  onClick={() => handleRoleStatusChange(role)}
-                  className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mr-2"
-                >
-                  {role.estado ? "Desactivar" : "Activar"}
-                </button>
-
-                <button
-                  onClick={() => openDeleteModal(role)}
-                  className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300"
-                >
-                  Eliminar
-                </button>
-              </td>
+      {loading ? ( 
+        <p>Cargando roles...</p>
+      ) : (
+        <table className="mt-4 w-full">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-2">Id</th>
+              <th className="px-4 py-2">Rol</th>
+              <th className="px-4 py-2">Estado</th>
+              <th className="px-4 py-2">Fecha de Creación</th>
+              <th className="px-4 py-2">Fecha de Modificación</th>
+              <th className="px-4 py-2">Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {roles.map((role) => (
+              <tr key={role.id} className="border-b">
+                <td className="px-4 py-2 text-center">{role.id}</td>
+                <td className="px-4 py-2 text-center">{role.rol}</td>
+                <td className="px-4 py-2 text-center">
+                  {role.estado ? "Activo" : "Inactivo"}
+                </td>
+                <td className="px-4 py-2 text-center">{role.fechacreacion}</td>
+                <td className="px-4 py-2 text-center">
+                  {role.fechamodificacion}
+                </td>
+                <td className="px-4 py-2 text-center">
+                  <button
+                    onClick={() => handleRoleStatusChange(role)}
+                    className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mr-2"
+                  >
+                    {role.estado ? "Desactivar" : "Activar"}
+                  </button>
+
+                  <button
+                    onClick={() => openDeleteModal(role)}
+                    className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+      
+      )}
       {showDeleteModal && (
         <div className="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center bg-gray-500 bg-opacity-50">
           <div className="bg-white p-4 rounded-md">

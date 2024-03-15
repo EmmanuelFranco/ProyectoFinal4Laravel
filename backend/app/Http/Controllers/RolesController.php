@@ -31,7 +31,7 @@ class RolesController extends Controller
         $roles->save();
         
 
-        Bitacora::add("Se creo el usuario con el id: ". $roles->id, $request->usuariomodificacion);
+        Bitacora::add("Se creo el rol con el id: ". $roles->id, $request->usuariomodificacion);
         return 'rol guardado';
     }
 
@@ -46,7 +46,7 @@ class RolesController extends Controller
         $roles->usuariocreacion = $request->usuariocreacion;
         $roles->usuariomodificacion = $request->usuariomodificacion;
         $roles->save();
-        Bitacora::add("Se Actualizó el usuario con el id: ". $roles->id,$request->usuariomodificacion);
+        Bitacora::add("Se Actualizó el rol con el id: ". $roles->id,$request->usuariomodificacion);
         return 'rol actualizado';
     }
 
@@ -57,7 +57,7 @@ class RolesController extends Controller
     {
         $roles = roles::find($id);
         $roles->delete();
-        // Bitacora::add("Se eliminó el usuario con el id: ". $roles->id, );
+        Bitacora::add("Se eliminó el rol con el id: ". $roles->id, '');
         return 'rol eliminado';
     }
 }
